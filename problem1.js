@@ -27,7 +27,7 @@ function createFiles(dirPath , numberOfFiles , callback){
                 filesCreated++;
                 if(filesCreated === numberOfFiles){
                     callback(dirPath);
-                }
+                } 
             }
         })
     }
