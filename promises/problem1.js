@@ -41,9 +41,43 @@ function createFiles(dirPath, numberOfFiles) {
         })
 }
 
+function deleteFiles(dirPath) {
+    return fs.readdir(dirPath)  // Reads the contents of the directory, returns a promise
+        .then((files) => {
+            if (files.length === 0) {
+                console.log("No files to delete.");
+                return;
+            }
+
+            // Create an array of promises for each file deletion
+            let deletePromises = files.map((file) => {
+                const filePath = path.join(dirPath, file);
+                return fs.unlink(filePath)  // Delete the file
+                    .then(() => {
+                        console.log(`${file} deleted`);
+                    })
+                    .catch((error) => {
+                        console.error(`Error deleting ${file}:`, error);
+                    });
+            });
+
+            // Wait for all delete operations to complete
+            return Promise.all(deletePromises)
+                .then(() => {
+                    console.log("All files deleted successfully.");
+                });
+        })
+        .catch((error) => {
+            console.error("Error reading directory:", error);
+        });
+}
+
 
 
 createDirectory('./promiseDir')
-    .then(() => {
-        createFiles('./promiseDir', 3);
-    })
+    .then(() => createFiles('./promiseDir', 3))  
+    .then(() => deleteFiles('./promiseDir'))      
+    .catch((err) => {
+        console.log("Error in the process", err);
+    });
+
