@@ -42,7 +42,7 @@ function createFiles(dirPath, numberOfFiles) {
 }
 
 function deleteFiles(dirPath) {
-    return fs.readdir(dirPath)  // Reads the contents of the directory, returns a promise
+    return fs.readdir(dirPath) 
         .then((files) => {
             if (files.length === 0) {
                 console.log("No files to delete.");
