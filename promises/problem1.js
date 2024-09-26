@@ -5,10 +5,13 @@
 const fs = require('fs/promises');
 const path = require('path');
 
-function createDirectory(dirPath){
-    fs.mkdir(dirPath).then(() => {
-        console.log("directory created successfully");
-    }).catch((error) => {
-        console.error("error creating directory -> ", error);
-    })
+function createDirectory(dirPath) {
+    fs.mkdir(dirPath)
+        .then(() => {
+            console.log("directory created successfully");
+        })
+        .catch((error) => {
+            console.error("error creating directory -> ", error);
+        });
 }
+
