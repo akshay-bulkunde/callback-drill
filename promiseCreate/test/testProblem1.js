@@ -6,5 +6,5 @@ fileProcess()
         return deleteAllFiles();
     })
     .catch((err) => {
-        console.error("Error in process:", err);
+        console.error("Error in process: ", err);
     });
