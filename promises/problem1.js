@@ -2,7 +2,7 @@
 // 1. Create a directory of random JSON files
 // 2. Delete those files simultaneously 
 
-const { promises } = require('dns');
+// const { promises } = require('dns');
 const fs = require('fs/promises');
 const path = require('path');
 
