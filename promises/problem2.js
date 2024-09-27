@@ -10,7 +10,7 @@ const fs = require('fs/promises');
 const path = require('path');
 const filePath = './lipsum.txt'
 function readFile(filePath) {
-    fs.readFile(filePath, 'utf-8')
+    return fs.readFile(filePath, 'utf-8')
         .then((data) => {
             console.log("file read successfully");
             console.log(data);
@@ -25,7 +25,7 @@ function readFile(filePath) {
 
                 }).then(() => {
                     console.log(`${newFileName1} is appended in filenames.txt successfully`);
-                    // return readAndSplit(newFilePath1);
+                    return readAndSplit(newFilePath1);
                 });
 
         })
@@ -37,6 +37,33 @@ function readFile(filePath) {
 
 }
 
+function readAndSplit(newFilePath) {
+    fs.readFile(newFilePath, 'utf-8')
+        .then((data) => {
+            console.log("data read successfully");
+            console.log(data);
+
+            const lowerCaseData = data.toLowerCase().split('. ').join('\n');
+            const newFileName2 = 'file2.txt';
+            const newFilePath2 = path.join(__dirname, newFileName2);
+            return fs.writeFile(newFilePath2, lowerCaseData)
+                .then(() => {
+                    console.log(`lowerCaseData is added in ${newFileName2} successfully`);
+                    console.log(lowerCaseData)
+                    return appendFile('filenames.txt', newFileName2)
+                        .then(() => {
+                            console.log(`${newFileName2} is added in filenames.txt`);
+                        })
+                })
 
 
-readFile(filePath);
+        }).catch((err) => {
+            console.error("error in reading file", err);
+        })
+}
+
+readFile(filePath).then((newFilePath1) => {
+    return readAndSplit(newFilePath1)
+}).catch((err) => {
+    console.error(err);
+})
