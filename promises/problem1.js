@@ -49,7 +49,7 @@ function deleteFiles(dirPath) {
                 return;
             }
 
-            // Create an array of promises for each file deletion
+            
             let deletePromises = files.map((file) => {
                 const filePath = path.join(dirPath, file);
                 return fs.unlink(filePath)  // Delete the file
@@ -61,7 +61,7 @@ function deleteFiles(dirPath) {
                     });
             });
 
-            // Wait for all delete operations to complete
+           
             return Promise.all(deletePromises)
                 .then(() => {
                     console.log("All files deleted successfully.");
