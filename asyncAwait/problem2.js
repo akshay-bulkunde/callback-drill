@@ -20,39 +20,103 @@ async function readFile(filePath) {
 
 }
 
-async function writeFile(filePath , data){
-    try{
-        await fs.writeFile(filePath , data);
+async function writeFile(filePath, data) {
+    try {
+        await fs.writeFile(filePath, data);
         console.log(`Data written in file successfully in ${filePath}`);
         return filePath;
-    }catch(err){
-        console.error("Error in writing data" , err);
+    } catch (err) {
+        console.error("Error in writing data", err);
         throw err;
     }
 }
 
-async function appendFile(filePath , data){
-    try{
-        await fs.appendFile(filePath , data);
+async function appendFile(filePath, data) {
+    try {
+        await fs.appendFile(filePath, data);
         console.log(`Data appended in ${filePath}`);
         return filePath;
     }
-    catch(err){
+    catch (err) {
         console.error(`Error in appending to ${filePath} : ${err}`);
         throw err;
     }
 }
 
-async function deleteFile(filePath){
-    try{
+async function deleteFile(filePath) {
+    try {
         await fs.unlink(filePath)
         console.log(`File deleted : ${filePath}`);
         return filePath;
 
     }
-    catch(err){
+    catch (err) {
         console.error(`Error in deleting file : ${filePath}`);
         throw err;
     }
 
 }
+
+async function fileProcess() {
+    try {
+        const data = await readFile(filePath);
+        console.log("Original file read successfully");
+
+        const upperCaseData = data.toUpperCase();
+        const newFileName1 = 'file1.txt';
+        const newFilePath1 = path.join(__dirname, newFileName1);
+        await writeFile(newFilePath1, upperCaseData);
+        console.log(`upperCaseData is added in ${newFileName1}`);
+
+        await appendFile('filenames.txt', 'file1.txt\n');
+        console.log(`${newFileName1} is appended in filenames.txt`);
+
+        const data1 = await readFile(newFilePath1);
+        const lowerCaseData = data1.toLocaleLowerCase().split('. ').join('\n');
+        const newFileName2 = 'file2.txt';
+        const newFilePath2 = path.join(__dirname, newFileName2);
+        await writeFile(newFilePath2, lowerCaseData);
+        console.log(`lowerCaseData is added in ${newFileName2} successfully`);
+
+        await appendFile('filenames.txt', 'file2.txt\n');
+        console.log(`${newFileName2} is appended in filenames.txt successfully`);
+
+        const data2 = await readFile(newFilePath2);
+        const sortedData = data2.split('\n').sort().join('\n');
+        const newFileName3 = 'file3.txt';
+        const newFilePath3 = path.join(__dirname, 'file3.txt\n');
+        await writeFile(newFilePath3, sortedData);
+        console.log(`sortedData is added in ${newFileName3}`);
+
+        await appendFile('filenames.txt', newFileName3);
+        console.log(`${newFileName3} is appended in filenames.txt`);
+
+
+    }
+    catch (err) {
+        console.error(`Error in reading file : ${err}`);
+        throw err;
+    }
+}
+
+async function deleteAllFiles() {
+    try {
+        const fileNames = await readFile(path.join(__dirname, 'filenames.txt'));
+        const files = fileNames.trim().split('\n');
+        console.log(`Files to be deleted : ${files}`);
+
+        let deletePromises = files.map((file) => {
+            console.log(`${file} deleted `);
+            return fs.deleteFile(file);
+        })
+
+        await Promise.all(deletePromises);
+        console.log("All files deleted successfully");
+    }
+    catch (err) {
+        console.error(`Error in deleting files : ${err}`);
+        throw err;
+    }
+}
+
+module.exports = { readFile, writeFile, appendFile, deleteFile, fileProcess, deleteAllFiles };
