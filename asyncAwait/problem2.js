@@ -57,9 +57,9 @@ async function deleteFile(filePath) {
 
 }
 
-async function fileProcess() {
+async function fileProcess(initialFilePath) {
     try {
-        const data = await readFile(filePath);
+        const data = await readFile(initialFilePath);
         console.log("Original file read successfully");
 
         const upperCaseData = data.toUpperCase();
@@ -68,7 +68,7 @@ async function fileProcess() {
         await writeFile(newFilePath1, upperCaseData);
         console.log(`upperCaseData is added in ${newFileName1}`);
 
-        await appendFile('filenames.txt', 'file1.txt\n');
+        await appendFile('filenames.txt', `${newFileName1}\n`);
         console.log(`${newFileName1} is appended in filenames.txt`);
 
         const data1 = await readFile(newFilePath1);
@@ -78,17 +78,17 @@ async function fileProcess() {
         await writeFile(newFilePath2, lowerCaseData);
         console.log(`lowerCaseData is added in ${newFileName2} successfully`);
 
-        await appendFile('filenames.txt', 'file2.txt\n');
+        await appendFile('filenames.txt', `${newFileName2}\n`);
         console.log(`${newFileName2} is appended in filenames.txt successfully`);
 
         const data2 = await readFile(newFilePath2);
         const sortedData = data2.split('\n').sort().join('\n');
         const newFileName3 = 'file3.txt';
-        const newFilePath3 = path.join(__dirname, 'file3.txt\n');
+        const newFilePath3 = path.join(__dirname, 'file3.txt');
         await writeFile(newFilePath3, sortedData);
         console.log(`sortedData is added in ${newFileName3}`);
 
-        await appendFile('filenames.txt', newFileName3);
+        await appendFile('filenames.txt', `${newFileName3}\n`);
         console.log(`${newFileName3} is appended in filenames.txt`);
 
 
@@ -106,8 +106,8 @@ async function deleteAllFiles() {
         console.log(`Files to be deleted : ${files}`);
 
         let deletePromises = files.map((file) => {
-            console.log(`${file} deleted `);
-            return fs.deleteFile(file);
+            // console.log(`${file} deleted `);
+            return deleteFile(file);
         })
 
         await Promise.all(deletePromises);
