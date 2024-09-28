@@ -9,7 +9,7 @@ const path = require('path');
 
 async function readFile(filePath) {
     try {
-        const data = await fs.readFile(filePath);
+        const data = await fs.readFile(filePath, 'utf-8');
         console.log("file read successfully");
         return data;
     }
@@ -19,3 +19,15 @@ async function readFile(filePath) {
     }
 
 }
+
+async function writeFile(filePath , data){
+    try{
+        await fs.writeFile(filePath , data);
+        console.log(`Data written in file successfully in ${filePath}`);
+        return filePath;
+    }catch(err){
+        console.error("Error in writing data" , err);
+        throw err;
+    }
+}
+
