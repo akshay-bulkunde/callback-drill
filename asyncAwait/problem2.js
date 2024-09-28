@@ -42,3 +42,17 @@ async function appendFile(filePath , data){
         throw err;
     }
 }
+
+async function deleteFile(filePath){
+    try{
+        await fs.unlink(filePath)
+        console.log(`File deleted : ${filePath}`);
+        return filePath;
+
+    }
+    catch(err){
+        console.error(`Error in deleting file : ${filePath}`);
+        throw err;
+    }
+
+}
