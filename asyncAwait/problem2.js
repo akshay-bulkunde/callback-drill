@@ -31,3 +31,14 @@ async function writeFile(filePath , data){
     }
 }
 
+async function appendFile(filePath , data){
+    try{
+        await fs.appendFile(filePath , data);
+        console.log(`Data appended in ${filePath}`);
+        return filePath;
+    }
+    catch(err){
+        console.error(`Error in appending to ${filePath} : ${err}`);
+        throw err;
+    }
+}
