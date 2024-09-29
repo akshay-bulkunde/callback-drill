@@ -1,20 +1,13 @@
-const {createDirectory , createFiles , deleteFiles} = require('../problem1.js');
-
+const { createDirectory, createFiles, deleteAllFiles } = require('../problem1.js');
+const path = require('path');
+const dirPath = path.join(__dirname , 'jsonFolder');
 let numberOfFiles = 3;
 
-
-
-// createDirectory('callbackFolder', numberOfFiles, function(dirPath, numberOfFiles ) {
-//     createFiles(dirPath, numberOfFiles , function(dirPath) {
-//         console.log("All files created. Now deleting...");
-//         deleteFiles(dirPath);
-//     });
-// });
-
-
-createDirectory('callbackFolder' , numberOfFiles, (dirPath , numberOfFiles) => {
-    createFiles(dirPath , numberOfFiles , (dirPath) => {
-        console.log("All files created. Now deleting...");
-        deleteFiles(dirPath);
+createDirectory(dirPath , (dirPath) => {
+    createFiles(dirPath , numberOfFiles , () => {
+        console.log("All files are created. Now Deleting....");
+        deleteAllFiles(dirPath , () => {
+            console.log("All Files are deleted successfully");
+        })
     })
 })
