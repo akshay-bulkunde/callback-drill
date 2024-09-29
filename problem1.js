@@ -1,64 +1,58 @@
 const fs = require('fs');
-const path = require('path')
+const path = require('path');
 
-function createDirectory(dirPath , numberOfFiles , callback){
-    fs.mkdir(dirPath , (error) => {
-        if(error){
-            console.error(error);
-            return;
+function createDirectory(dirPath, callback) {
+    fs.mkdir(dirPath, { recursive: true }, (err) => {
+        if (err) {
+            console.error(`Error in creating Directory : ${err}`);
+        } else {
+            console.log(`Directory is created successfully at : ${dirPath}`);
+            callback(dirPath);
         }
-        console.log("Directory Created Successfully");
-        callback(dirPath , numberOfFiles);
-        
     })
-    
 }
 
-function createFiles(dirPath , numberOfFiles , callback){
-    let filesCreated = 0;
-    for(let i=1;i<=numberOfFiles;i++){
-        let fileName = `file${i}.json`;
-        let filePath = path.join(dirPath, fileName);
-        fs.writeFile(filePath , 'file data' , (error) => {
-            if(error){
-                console.error(error);
-            }else{
-                console.log(`file${i}.json created`);
-                filesCreated++;
-                if(filesCreated === numberOfFiles){
+function createFiles(dirPath, fileCount, callback) {
+    let createdFiles = 0;
+    for (let index = 1; index <= fileCount; index++) {
+        const filename = `file${index}.json`;
+        const filePath = path.join(dirPath, filename);
+        fs.writeFile(filePath, "File data", (err) => {
+            if (err) {
+                console.error(`Error in creating file : ${err}`);
+            } else {
+                console.log(`${filename} is created successfully`);
+                createdFiles++;
+                if (createdFiles === fileCount) {
                     callback(dirPath);
-                } 
+                }
             }
         })
     }
-    
 }
 
-function deleteFiles(dirPath){
-    fs.readdir(dirPath, (error, files) => {
-        if (error) {
-            console.error(error);
-            return;
+function deleteAllFiles(dirPath, callback) {
+    fs.readdir(dirPath, 'utf-8', (err, files) => {
+        if (err) {
+            console.error(`Error in reading directory : ${err}`);
+        } else {
+            console.log("Directory read successfully");
+            let deletedFiles = 0;
+            files.forEach((file) => {
+                let filePath = path.join(dirPath, file);
+                fs.unlink(filePath, (err) => {
+                    if (err) {
+                        console.error(`Error in deleting : ${file}`);
+                    } else {
+                        console.log(`${file} deleted successfully`);
+                        if (deletedFiles === files.length) {
+                            callback();
+                        }
+                    }
+                })
+            })
         }
-        let countOfDeletedFiles = 0;
-        if (files.length === 0) {
-            console.log("No files to delete.");
-            return;
-        }
-        files.forEach((file) => {
-            const filePath = path.join(dirPath, file);
-            fs.unlink(filePath, (error) => {
-                if (error) {
-                    console.log(error);
-                    return;
-                }
-                countOfDeletedFiles++;
-                if (countOfDeletedFiles === files.length) {
-                    console.log("All files deleted successfully");
-                }
-            });
-        });
-    });
+    })
 }
 
-module.exports = { createDirectory , createFiles , deleteFiles};
+module.exports = { createDirectory, createFiles, deleteAllFiles }
