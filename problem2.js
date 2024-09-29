@@ -8,7 +8,7 @@
 //         5. Read the contents of filenames.txt and delete all the new files that are mentioned in that list simultaneously.
 
 
-const { isUtf8 } = require('buffer');
+
 const fs = require('fs');
 const path = require('path');
 
