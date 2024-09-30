@@ -118,4 +118,6 @@ function deleteAllFiles() {
     })
 }
 
-module.exports = { readFile, writeFile, appendFile, deleteFile, fileProcess, deleteAllFiles };
+
+
+module.exports = { fileProcess, deleteAllFiles };
