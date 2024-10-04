@@ -9,17 +9,14 @@ const path = require('path');
 async function createDirectory(dirPath, numberOfFiles) {
     try {
         await fs.mkdir(dirPath, { recursive: true });
-
-        const filePromises = [];
-
         for (let index = 1; index <= numberOfFiles; index++) {
             const fileName = `file${index}.json`;
             const filePath = path.join(dirPath, fileName);
-            filePromises.push(fs.writeFile(filePath, "file data"));
+            await fs.writeFile(filePath, "file data");
 
         }
-        await Promise.all(filePromises);
         console.log(`Created ${numberOfFiles} files in: ${dirPath}`)
+
     }
     catch (err) {
         console.error('Error creating files:', err);
@@ -29,11 +26,11 @@ async function createDirectory(dirPath, numberOfFiles) {
 async function deleteFiles(dirPath) {
     try {
         const files = await fs.readdir(dirPath);
-        let deletePromises = files.map((file) => {
+        for (const file of files) {
             let filePath = path.join(dirPath, file);
-            return fs.unlink(filePath)
-        });
-        await Promise.all(deletePromises);
+            await fs.unlink(filePath)
+        }
+
         console.log("All files deleted successfully");
     }
     catch (err) {
