@@ -105,12 +105,9 @@ async function deleteAllFiles() {
         const files = fileNames.trim().split('\n');
         console.log(`Files to be deleted : ${files}`);
 
-        let deletePromises = files.map((file) => {
-            // console.log(`${file} deleted `);
-            return deleteFile(file);
-        })
-
-        await Promise.all(deletePromises);
+        for(const file of files){
+            await deleteFile(file);
+        }
         console.log("All files deleted successfully");
     }
     catch (err) {
